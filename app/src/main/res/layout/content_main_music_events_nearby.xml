@@ -1,0 +1,113 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".MusicEventsNearbyActivity"
+    tools:showIn="@layout/activity_music_events_nearby">
+
+    <ListView
+        android:id="@+id/lvListMusicEvents"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/nr_seekbar_lay"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shadow_radius_bar"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff">
+
+            <TextView
+                android:id="@+id/nr_radius_txt_0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="1 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+
+            <TextView
+                android:id="@+id/nr_radius_txt_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="5 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+
+            <TextView
+                android:id="@+id/nr_radius_txt_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="10 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+
+            <TextView
+                android:id="@+id/nr_radius_txt_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="20 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+
+            <TextView
+                android:id="@+id/nr_radius_txt_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="50 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+
+            <TextView
+                android:id="@+id/nr_radius_txt_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="100 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+
+            <TextView
+                android:id="@+id/nr_radius_txt_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="200 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+
+            <TextView
+                android:id="@+id/nr_radius_txt_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.0"
+                android:text="500 km"
+                android:textColor="@color/colorGray"
+                android:textSize="@dimen/radius_text_size" />
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/nr_radius_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_seek_bar"
+            android:max="7"
+            android:progress="0"
+            android:layout_marginTop="5dp"
+            android:progressDrawable="@drawable/seekbar" />
+
+    </LinearLayout>
+
+</RelativeLayout>

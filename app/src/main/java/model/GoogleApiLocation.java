@@ -129,7 +129,6 @@ public class GoogleApiLocation implements GoogleApiClient.ConnectionCallbacks, G
 
         if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
         } else {
             //If everything went fine lets get current location
             Toast.makeText(mActivity, "Current Location: "+location.getLatitude() + " - " + location.getLongitude() + "", Toast.LENGTH_SHORT).show();

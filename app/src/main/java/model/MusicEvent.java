@@ -3,9 +3,9 @@ package model;
 /**
  * Created by Administrator on 7/9/2016.
  */
-public class Event {
+public class MusicEvent {
 
-    private int id;
+    private String id;
     private String title;
     private String description;
     private String url;
@@ -17,28 +17,16 @@ public class Event {
     private double latitude;
     private double longitude;
 
-    public Event(int id, String title, String description, String url, String start_time, String stop_time, String venue_id, String venue_name, String venue_address, double latitude, double longitude) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.url = url;
-        this.start_time = start_time;
-        this.stop_time = stop_time;
-        this.venue_id = venue_id;
-        this.venue_name = venue_name;
-        this.venue_address = venue_address;
-        this.latitude = latitude;
-        this.longitude = longitude;
+    private String imageUrl;
+
+    public MusicEvent() {
     }
 
-    public Event() {
-    }
-
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -120,5 +108,13 @@ public class Event {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

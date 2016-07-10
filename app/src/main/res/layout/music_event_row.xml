@@ -6,6 +6,7 @@
     android:orientation="horizontal">
 
     <ImageView
+        android:id="@+id/ivMusicEvent"
         android:layout_width="@dimen/width_thumb_event"
         android:layout_height="@dimen/height_thumb_event"
         android:background="@drawable/ic_music_event"/>
@@ -17,12 +18,14 @@
         android:padding="@dimen/activity_vertical_padding"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/tvMusicEventTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="2"
             android:textStyle="bold"
             android:text="Hà nội Offline: Đại chiến Pháp - Đức"/>
         <TextView
+            android:id="@+id/tvMusicEventTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_vertical_padding"

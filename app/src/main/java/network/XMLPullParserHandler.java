@@ -33,14 +33,19 @@ public class XMLPullParserHandler {
 
             parser.setInput(new StringReader(xmlStr));
 
+            boolean start_tag_image = false;
+
             int eventType = parser.getEventType();
             while (eventType != XmlPullParser.END_DOCUMENT) {
-                String tagname = parser.getName();
+                String tag_name = parser.getName();
                 switch (eventType) {
                     case XmlPullParser.START_TAG:
-                        if (tagname.equalsIgnoreCase("event")) {
+                        if (tag_name.equalsIgnoreCase("event")) {
                             // create a new instance of employee
                             musicEvent = new MusicEvent();
+                            start_tag_image = false;
+                        } else if (tag_name.equalsIgnoreCase("image")) {
+                            start_tag_image = true;
                         }
                         break;
 
@@ -49,28 +54,31 @@ public class XMLPullParserHandler {
                         break;
 
                     case XmlPullParser.END_TAG:
-                        if (tagname.equalsIgnoreCase("event")) {
-                            // add employee object to list
+                        if (tag_name.equalsIgnoreCase("event")) {
+                            // add event object to list
                             musicEvents.add(musicEvent);
-                        } else if (tagname.equalsIgnoreCase("id")) {
+                        } else if (tag_name.equalsIgnoreCase("id")) {
                             musicEvent.setId(text);
-                        } else if (tagname.equalsIgnoreCase("title")) {
+                        } else if (tag_name.equalsIgnoreCase("title")) {
                             musicEvent.setTitle(text);
-                        } else if (tagname.equalsIgnoreCase("description")) {
+                        } else if (tag_name.equalsIgnoreCase("description")) {
                             musicEvent.setDescription(text);
-                        } else if (tagname.equalsIgnoreCase("url")) {
-                            musicEvent.setUrl(text);
-                        } else if (tagname.equalsIgnoreCase("start_time")) {
+                        } else if (tag_name.equalsIgnoreCase("url")) {
+                            if (start_tag_image)
+                                musicEvent.setImageUrl(text);
+                            else
+                                musicEvent.setUrl(text);
+                        } else if (tag_name.equalsIgnoreCase("start_time")) {
                             musicEvent.setStart_time(text);
-                        } else if (tagname.equalsIgnoreCase("venue_id")) {
+                        } else if (tag_name.equalsIgnoreCase("venue_id")) {
                             musicEvent.setVenue_id(text);
-                        } else if (tagname.equalsIgnoreCase("venue_address")) {
+                        } else if (tag_name.equalsIgnoreCase("venue_address")) {
                             musicEvent.setVenue_address(text);
-                        } else if (tagname.equalsIgnoreCase("venue_name")) {
+                        } else if (tag_name.equalsIgnoreCase("venue_name")) {
                             musicEvent.setVenue_name(text);
-                        } else if (tagname.equalsIgnoreCase("latitude")) {
+                        } else if (tag_name.equalsIgnoreCase("latitude")) {
                             musicEvent.setLatitude(Double.parseDouble(text));
-                        } else if (tagname.equalsIgnoreCase("longitude")) {
+                        } else if (tag_name.equalsIgnoreCase("longitude")) {
                             musicEvent.setLongitude(Double.parseDouble(text));
                         }
                         break;

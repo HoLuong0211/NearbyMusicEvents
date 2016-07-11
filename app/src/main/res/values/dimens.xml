@@ -14,4 +14,10 @@
 
     <dimen name="width_ic_next">5dp</dimen>
     <dimen name="height_ic_next">20dp</dimen>
+
+    <dimen name="height_header_image">200dp</dimen>
+    <dimen name="height_event_detail">120dp</dimen>
+    <dimen name="height_mapview">120dp</dimen>
+
+    <dimen name="line_width">3dp</dimen>
 </resources>

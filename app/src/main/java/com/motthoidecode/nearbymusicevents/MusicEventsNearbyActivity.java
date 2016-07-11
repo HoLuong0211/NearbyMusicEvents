@@ -1,6 +1,7 @@
 package com.motthoidecode.nearbymusicevents;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.ConnectivityManager;
@@ -8,6 +9,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -27,7 +30,7 @@ import utils.PreferenceUtils;
 
 public class MusicEventsNearbyActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, OnDownloadXMLCompleteListener {
 
-    private static final String ORANGE = "#FF8F29";
+    public static final String ORANGE = "#FF8F29";
     private static final String GRAY = "#9a9289";
     private SeekBar radiusControl;
     private TextView nr_radius_txt_0, nr_radius_txt_1, nr_radius_txt_2, nr_radius_txt_3,
@@ -147,6 +150,25 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
         ListView lvListMusicEvents = (ListView)findViewById(R.id.lvListMusicEvents);
         ListEventsAdapter eventsAdapter = new ListEventsAdapter(this,R.layout.music_event_row,musicEvents);
         lvListMusicEvents.setAdapter(eventsAdapter);
+           lvListMusicEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+               @Override
+               public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                   MusicEvent event = musicEvents.get(position);
+                   Intent i = new Intent(MusicEventsNearbyActivity.this,EventDetailActivity.class);
+                   i.putExtra(Config.KEY_ID, event.getId());
+                   i.putExtra(Config.KEY_TITLE, event.getTitle());
+                   i.putExtra(Config.KEY_DESCRIPTION, event.getDescription());
+                   i.putExtra(Config.KEY_URL, event.getUrl());
+                   i.putExtra(Config.KEY_START_TIME, event.getStart_time());
+                   i.putExtra(Config.KEY_STOP_TIME, event.getStop_time());
+                   i.putExtra(Config.KEY_VENUE_ID, event.getVenue_id());
+                   i.putExtra(Config.KEY_VENUE_NAME, event.getVenue_name());
+                   i.putExtra(Config.KEY_VENUE_ADDRESS, event.getVenue_address());
+                   i.putExtra(Config.KEY_LATITUDE, event.getLatitude());
+                   i.putExtra(Config.KEY_LONGITUDE, event.getLongitude());
+                   startActivity(i);
+               }
+           });
     }
 
     public void setCurrentLocation(Location location) {

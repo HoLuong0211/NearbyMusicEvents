@@ -69,18 +69,13 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
 
         setRadiusTextColor();
         googleApiLocation = new GoogleApiLocation(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         googleApiLocation.connect();
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
         googleApiLocation.disconnect();
+        super.onDestroy();
     }
 
     @Override
@@ -112,6 +107,9 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
                 break;
         }
         setRadiusTextColor();
+        googleApiLocation.disconnect();
+        googleApiLocation.connect();
+
     }
 
     @Override

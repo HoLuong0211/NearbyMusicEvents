@@ -41,7 +41,9 @@ public class ListEventsAdapter extends ArrayAdapter<MusicEvent> {
         MusicEvent musicEvent = musicEvents.get(position);
         tvMusicEventTitle.setText(musicEvent.getTitle());
         tvMusicEventTime.setText(musicEvent.getStart_time());
-        if (musicEvent.getImageUrl() != null)
+        if (musicEvent.getImageUrl() == null)
+            ivMusicEvent.setImageResource(R.mipmap.ic_music_event);
+        else
             Picasso.with(mContext).load(musicEvent.getImageUrl()).into(ivMusicEvent);
 
         return convertView;

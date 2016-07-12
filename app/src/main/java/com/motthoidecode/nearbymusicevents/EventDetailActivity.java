@@ -30,7 +30,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
 
     private static final float DEFAULT_ZOOM = 14;
 
-    private TextView tvEventTitle, tvLocation, tvDate, tvEventDetails, tvEventVenue, tvMore;
+    private TextView tvEventTitle, tvLocation, tvDate, tvEventDetails, tvEventVenue;
     private Button btnGetTickets;
     private ImageView ivEventDetail;
     private MapView mMapView;
@@ -52,7 +52,6 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         tvDate = (TextView) findViewById(R.id.tvDate);
         tvEventDetails = (TextView) findViewById(R.id.tvEventDetails);
         tvEventVenue = (TextView) findViewById(R.id.tvEventVenue);
-        tvMore = (TextView) findViewById(R.id.tvMore);
         btnGetTickets = (Button) findViewById(R.id.btnGetTickets);
         ivEventDetail = (ImageView) findViewById(R.id.ivEventDetail);
         mCurrentLocation = new Location("");
@@ -81,8 +80,10 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         tvEventVenue.setText(musicEvent.getVenue_name());
         if (musicEvent.getImageUrl() == null) {
             ivEventDetail.setBackgroundColor(Color.parseColor(MusicEventsNearbyActivity.ORANGE));
-        } else
+        } else {
             Picasso.with(this).load(musicEvent.getImageUrl()).into(ivEventDetail);
+            tvEventTitle.setTextColor(Color.parseColor(MusicEventsNearbyActivity.ORANGE));
+        }
 
         mCurrentLocation.setLatitude(musicEvent.getLatitude());
         mCurrentLocation.setLongitude(musicEvent.getLongitude());
@@ -99,6 +100,8 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                 startActivity(website);
             }
         });
+
+        Config.makeTextViewResizable(tvEventDetails,3,"View More", true);
     }
 
     @Override

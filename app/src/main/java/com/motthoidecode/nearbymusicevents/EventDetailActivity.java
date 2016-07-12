@@ -3,11 +3,13 @@ package com.motthoidecode.nearbymusicevents;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -55,7 +57,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         ivEventDetail = (ImageView) findViewById(R.id.ivEventDetail);
         mCurrentLocation = new Location("");
 
-        MusicEvent musicEvent = new MusicEvent();
+        final MusicEvent musicEvent = new MusicEvent();
         Intent i = getIntent();
         musicEvent.setId(i.getStringExtra(Config.KEY_ID));
         musicEvent.setTitle(i.getStringExtra(Config.KEY_TITLE));
@@ -68,6 +70,7 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         musicEvent.setVenue_address(i.getStringExtra(Config.KEY_VENUE_ADDRESS));
         musicEvent.setLongitude(i.getDoubleExtra(Config.KEY_LONGITUDE, 0));
         musicEvent.setLatitude(i.getDoubleExtra(Config.KEY_LATITUDE, 0));
+        musicEvent.setImageUrl(i.getStringExtra(Config.KEY_IMAGE_URL));
 
         actionBar.setTitle(musicEvent.getTitle());
 
@@ -87,6 +90,15 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
         mMapView = (MapView) findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
+
+        btnGetTickets.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent website = new Intent(Intent.ACTION_VIEW);
+                website.setData(Uri.parse(musicEvent.getUrl()));
+                startActivity(website);
+            }
+        });
     }
 
     @Override

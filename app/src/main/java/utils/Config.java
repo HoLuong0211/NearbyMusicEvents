@@ -20,4 +20,5 @@ public class Config {
     public static String KEY_VENUE_ADDRESS = "venue_address";
     public static String KEY_LATITUDE = "latitude";
     public static String KEY_LONGITUDE = "longitude";
+    public static String KEY_IMAGE_URL = "imageUrl";
 }

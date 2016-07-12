@@ -9,10 +9,16 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -38,6 +44,7 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
     private TextView nr_radius_txt_0, nr_radius_txt_1, nr_radius_txt_2, nr_radius_txt_3,
             nr_radius_txt_4, nr_radius_txt_5, nr_radius_txt_6, nr_radius_txt_7;
     private ProgressDialog progressDialog;
+    private LinearLayout footer_layout;
 
     private PreferenceUtils mPreference;
     private Location mCurrentLocation;
@@ -62,6 +69,7 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
         nr_radius_txt_6 = (TextView) findViewById(R.id.nr_radius_txt_6);
         nr_radius_txt_7 = (TextView) findViewById(R.id.nr_radius_txt_7);
         radiusControl = (SeekBar) findViewById(R.id.nr_radius_bar);
+        footer_layout = (LinearLayout)findViewById(R.id.nr_seekbar_lay);
         mPreference = new PreferenceUtils(getApplicationContext());
 
         musicEvents = new ArrayList<>();
@@ -138,37 +146,121 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
         downloadTask.execute(urlStr);
     }
 
-       @Override
+    @Override
     public void onDownloadXMLComplete(String xmlStr) {
-        if(progressDialog.isShowing())  progressDialog.dismiss();
-        if(xmlStr == null){
+        if (progressDialog.isShowing()) progressDialog.dismiss();
+        if (xmlStr == null) {
             showToastMessage("Null XML String!");
             return;
         }
         XMLPullParserHandler parserHandler = new XMLPullParserHandler();
         musicEvents = parserHandler.parse(xmlStr);
-        ListView lvListMusicEvents = (ListView)findViewById(R.id.lvListMusicEvents);
-        ListEventsAdapter eventsAdapter = new ListEventsAdapter(this,R.layout.music_event_row,musicEvents);
+        final ListView lvListMusicEvents = (ListView) findViewById(R.id.lvListMusicEvents);
+        ListEventsAdapter eventsAdapter = new ListEventsAdapter(this, R.layout.music_event_row, musicEvents);
         lvListMusicEvents.setAdapter(eventsAdapter);
-           lvListMusicEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-               @Override
-               public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                   MusicEvent event = musicEvents.get(position);
-                   Intent i = new Intent(MusicEventsNearbyActivity.this,EventDetailActivity.class);
-                   i.putExtra(Config.KEY_ID, event.getId());
-                   i.putExtra(Config.KEY_TITLE, event.getTitle());
-                   i.putExtra(Config.KEY_DESCRIPTION, event.getDescription());
-                   i.putExtra(Config.KEY_URL, event.getUrl());
-                   i.putExtra(Config.KEY_START_TIME, event.getStart_time());
-                   i.putExtra(Config.KEY_STOP_TIME, event.getStop_time());
-                   i.putExtra(Config.KEY_VENUE_ID, event.getVenue_id());
-                   i.putExtra(Config.KEY_VENUE_NAME, event.getVenue_name());
-                   i.putExtra(Config.KEY_VENUE_ADDRESS, event.getVenue_address());
-                   i.putExtra(Config.KEY_LATITUDE, event.getLatitude());
-                   i.putExtra(Config.KEY_LONGITUDE, event.getLongitude());
-                   startActivity(i);
-               }
-           });
+        lvListMusicEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MusicEvent event = musicEvents.get(position);
+                Intent i = new Intent(MusicEventsNearbyActivity.this, EventDetailActivity.class);
+                i.putExtra(Config.KEY_ID, event.getId());
+                i.putExtra(Config.KEY_TITLE, event.getTitle());
+                i.putExtra(Config.KEY_DESCRIPTION, event.getDescription());
+                i.putExtra(Config.KEY_URL, event.getUrl());
+                i.putExtra(Config.KEY_START_TIME, event.getStart_time());
+                i.putExtra(Config.KEY_STOP_TIME, event.getStop_time());
+                i.putExtra(Config.KEY_VENUE_ID, event.getVenue_id());
+                i.putExtra(Config.KEY_VENUE_NAME, event.getVenue_name());
+                i.putExtra(Config.KEY_VENUE_ADDRESS, event.getVenue_address());
+                i.putExtra(Config.KEY_LATITUDE, event.getLatitude());
+                i.putExtra(Config.KEY_LONGITUDE, event.getLongitude());
+                i.putExtra(Config.KEY_IMAGE_URL, event.getImageUrl());
+                startActivity(i);
+            }
+        });
+
+        lvListMusicEvents.setOnScrollListener(new AbsListView.OnScrollListener() {
+            int mLastFirstVisibleItem;
+            boolean isAnimating = false;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                if(mLastFirstVisibleItem<firstVisibleItem)
+                {
+                    // SCROLLING DOWN = TRUE
+                    if(footer_layout.getVisibility()==View.VISIBLE && !isAnimating){
+                        Animation slide = null;
+                        slide = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+                                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+                                0.0f, Animation.RELATIVE_TO_SELF, 0.5f);
+
+                        slide.setDuration(500);
+                        slide.setFillAfter(true);
+                        slide.setFillEnabled(true);
+                        footer_layout.startAnimation(slide);
+
+                        slide.setAnimationListener(new Animation.AnimationListener() {
+
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                isAnimating = true;
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {}
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                footer_layout.clearAnimation();
+                                footer_layout.setVisibility(View.INVISIBLE);
+                                isAnimating = false;
+                            }
+
+                        });
+                    }
+                }
+                if(mLastFirstVisibleItem>firstVisibleItem)
+                {
+                    // SCROLLING UP = TRUE
+                    if(footer_layout.getVisibility()==View.INVISIBLE && !isAnimating){
+                        Animation slide = null;
+                        slide = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+                                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+                                0.5f, Animation.RELATIVE_TO_SELF, 0.0f);
+
+                        slide.setDuration(500);
+                        slide.setFillAfter(true);
+                        slide.setFillEnabled(true);
+                        footer_layout.startAnimation(slide);
+
+                        slide.setAnimationListener(new Animation.AnimationListener() {
+
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                isAnimating = true;
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                footer_layout.clearAnimation();
+                                footer_layout.setVisibility(View.VISIBLE);
+                                isAnimating = false;
+                            }
+
+                        });
+                    }
+                }
+                mLastFirstVisibleItem=firstVisibleItem;
+            }
+        });
     }
 
     public void setCurrentLocation(Location location) {
@@ -276,13 +368,13 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_refresh:
                 googleApiLocation.disconnect();
                 googleApiLocation.connect();

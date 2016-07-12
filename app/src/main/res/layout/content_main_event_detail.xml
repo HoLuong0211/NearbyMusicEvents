@@ -218,7 +218,7 @@ Bí mật của thung lũng Silicon nằm ở kiến thức và khả năng củ
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_horizontal_padding"
-                android:text="EVENT DETAILS"
+                android:text="VENUE"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 

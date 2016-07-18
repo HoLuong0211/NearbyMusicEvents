@@ -9,12 +9,10 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -24,6 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,20 +160,9 @@ public class MusicEventsNearbyActivity extends AppCompatActivity implements Seek
         lvListMusicEvents.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MusicEvent event = musicEvents.get(position);
                 Intent i = new Intent(MusicEventsNearbyActivity.this, EventDetailActivity.class);
-                i.putExtra(Config.KEY_ID, event.getId());
-                i.putExtra(Config.KEY_TITLE, event.getTitle());
-                i.putExtra(Config.KEY_DESCRIPTION, event.getDescription());
-                i.putExtra(Config.KEY_URL, event.getUrl());
-                i.putExtra(Config.KEY_START_TIME, event.getStart_time());
-                i.putExtra(Config.KEY_STOP_TIME, event.getStop_time());
-                i.putExtra(Config.KEY_VENUE_ID, event.getVenue_id());
-                i.putExtra(Config.KEY_VENUE_NAME, event.getVenue_name());
-                i.putExtra(Config.KEY_VENUE_ADDRESS, event.getVenue_address());
-                i.putExtra(Config.KEY_LATITUDE, event.getLatitude());
-                i.putExtra(Config.KEY_LONGITUDE, event.getLongitude());
-                i.putExtra(Config.KEY_IMAGE_URL, event.getImageUrl());
+                i.putExtra("POSITION",position);
+                i.putExtra("LIST_EVENTS", (Serializable) musicEvents);
                 startActivity(i);
             }
         });

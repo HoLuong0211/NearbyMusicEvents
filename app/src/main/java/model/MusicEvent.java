@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 7/9/2016.
  */
-public class MusicEvent {
+public class MusicEvent implements Serializable{
 
     private String id;
     private String title;

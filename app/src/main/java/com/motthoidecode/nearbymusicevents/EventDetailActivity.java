@@ -37,7 +37,6 @@ public class EventDetailActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mCustomPagerAdapter);
         mViewPager.setCurrentItem(position);
-        mActionBar.setTitle(musicEvents.get(position).getTitle());
     }
 
     @Override

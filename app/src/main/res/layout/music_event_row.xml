@@ -10,6 +10,8 @@
         android:id="@+id/ivMusicEvent"
         android:layout_width="@dimen/width_thumb_event"
         android:layout_height="@dimen/height_thumb_event"
+        android:scaleType="center"
+        android:src="@drawable/ic_music_event"
         />
 
     <LinearLayout

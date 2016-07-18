@@ -9,8 +9,8 @@
     <dimen name="height_radius_bar">80dp</dimen>
     <dimen name="height_seek_bar">32dp</dimen>
 
-    <dimen name="width_thumb_event">100dp</dimen>
-    <dimen name="height_thumb_event">100dp</dimen>
+    <dimen name="width_thumb_event">90dp</dimen>
+    <dimen name="height_thumb_event">90dp</dimen>
 
     <dimen name="width_ic_next">5dp</dimen>
     <dimen name="height_ic_next">20dp</dimen>

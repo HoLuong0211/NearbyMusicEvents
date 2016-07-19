@@ -26,7 +26,7 @@ import com.motthoidecode.nearbymusicevents.MusicEventsNearbyActivity;
 public class GoogleApiLocation implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     //Define a request code to send to Google Play services
-    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+    public final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;

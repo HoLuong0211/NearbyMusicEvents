@@ -21,6 +21,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.motthoidecode.nearbymusicevents.FullMapViewActivity;
 import com.motthoidecode.nearbymusicevents.MusicEventsNearbyActivity;
 import com.motthoidecode.nearbymusicevents.R;
 import com.squareup.picasso.Picasso;
@@ -36,6 +37,7 @@ public class EventDetailFragment extends Fragment  implements OnMapReadyCallback
     private static final float DEFAULT_ZOOM = 14;
     private GoogleMap mMap;
     private Location mEventLocation;
+    private MusicEvent musicEvent;
 
     public EventDetailFragment(){}
 
@@ -58,7 +60,7 @@ public class EventDetailFragment extends Fragment  implements OnMapReadyCallback
         ivEventDetail = (ImageView) rootView.findViewById(R.id.ivEventDetail);
         mEventLocation = new Location("");
 
-        final MusicEvent musicEvent = (MusicEvent) getArguments().getSerializable("MUSIC_EVENT");
+        musicEvent = (MusicEvent) getArguments().getSerializable("MUSIC_EVENT");
 
         tvEventTitle.setText(musicEvent.getTitle());
         tvLocation.setText(musicEvent.getVenue_address());
@@ -102,5 +104,16 @@ public class EventDetailFragment extends Fragment  implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(mLatLng));
         // Move the captureImage
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLatLng, DEFAULT_ZOOM));
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Intent fullMapView = new Intent(getContext(), FullMapViewActivity.class);
+                fullMapView.putExtra("LATITUDE",mEventLocation.getLatitude());
+                fullMapView.putExtra("LONGITUDE",mEventLocation.getLongitude());
+                fullMapView.putExtra("VENUE_NAME",musicEvent.getVenue_name());
+                startActivity(fullMapView);
+            }
+        });
     }
 }

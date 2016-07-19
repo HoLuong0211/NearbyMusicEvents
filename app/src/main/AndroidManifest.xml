@@ -33,7 +33,14 @@
 
         <activity
             android:name=".EventDetailActivity"
-            android:label="@string/title_activity_event_detail"></activity>
+            android:label="@string/title_activity_event_detail" />
+        <activity
+            android:name=".FullMapViewActivity"
+            android:label="@string/title_activity_full_map_view">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.motthoidecode.nearbymusicevents.EventDetailActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,13 +25,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import directions.DirectionsJSONParserTask;
+import directions.MapsDirections;
 import model.GoogleApiLocation;
 
-public class FullMapViewActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class FullMapViewActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, DirectionsJSONParserTask.OnJSONParserCompleteListener {
 
     private static final float DEFAULT_ZOOM = 15;
     private static final int PADDING = 100;
@@ -42,6 +43,8 @@ public class FullMapViewActivity extends FragmentActivity implements OnMapReadyC
     private String mVeneuName;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    // For drawing direction on Map
+    private Polyline mPolyline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class FullMapViewActivity extends FragmentActivity implements OnMapReadyC
 
         double lat = getIntent().getDoubleExtra("LATITUDE", 0);
         double lng = getIntent().getDoubleExtra("LONGITUDE", 0);
-        mEventLatLng = new LatLng(lat,lng);
+        mEventLatLng = new LatLng(lat, lng);
         mVeneuName = getIntent().getStringExtra("VENUE_NAME");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -99,7 +102,7 @@ public class FullMapViewActivity extends FragmentActivity implements OnMapReadyC
             return;
         }
         mMap.setMyLocationEnabled(true);
-        if(mCurrentLocation!=null)
+        if (mCurrentLocation != null)
             setUpMap();
     }
 
@@ -167,7 +170,7 @@ public class FullMapViewActivity extends FragmentActivity implements OnMapReadyC
     private void zoomMapsToShowAllTheMarkers() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-        MarkerOptions marker = new MarkerOptions().position(new LatLng(mCurrentLocation.getLatitude(),mCurrentLocation.getLongitude()));
+        MarkerOptions marker = new MarkerOptions().position(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()));
         builder.include(marker.getPosition());
         marker = new MarkerOptions().position(mEventLatLng);
         builder.include(marker.getPosition());
@@ -176,5 +179,25 @@ public class FullMapViewActivity extends FragmentActivity implements OnMapReadyC
         int padding = PADDING; // offset from edges of the map in pixels
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         mMap.moveCamera(cameraUpdate);
+    }
+
+    public void direct(View v) {
+        if (mCurrentLocation != null) {
+            MapsDirections mapsDirections = new MapsDirections(this);
+            LatLng mCurrentLatLng = new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude());
+            mapsDirections.direct(mCurrentLatLng, mEventLatLng, MapsDirections.TRAVEL_MODES.DRIVING);
+        }
+    }
+
+    @Override
+    public void onJSONParserComplete(DirectionsJSONParserTask task) {
+        // Drawing polyline in the Google Map for the i-th route
+        if (mPolyline != null)
+            mPolyline.remove();
+        if (!task.isError() && !task.isNoPoints()) {
+            mPolyline = mMap.addPolyline(task.getPolylineOptions());
+            zoomMapsToShowAllTheMarkers();
+        }
+
     }
 }
